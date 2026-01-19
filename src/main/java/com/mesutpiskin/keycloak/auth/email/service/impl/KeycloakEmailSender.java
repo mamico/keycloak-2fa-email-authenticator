@@ -9,7 +9,9 @@ import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Default email sender implementation using Keycloak's built-in SMTP
@@ -64,7 +66,8 @@ public class KeycloakEmailSender implements EmailSender {
 
             // Send email using Keycloak's template system
             // The template data should contain: username, code, ttl
-            emailProvider.send("emailCodeSubject", subjectParams, "code-email.ftl", message.getTemplateData());
+            Map<String, Object> templateData = new HashMap<>(message.getTemplateData());
+            emailProvider.send("emailCodeSubject", subjectParams, "code-email.ftl", templateData);
 
             logger.debugf("Email sent successfully via Keycloak SMTP to %s", message.getTo());
 
